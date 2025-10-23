@@ -46,6 +46,28 @@ public class TestPrime {
 		return rezultat;
 	}
 	
+	// test solutie paralela noua
+	// se poate face mai rapida daca se trece doar prin numere impare
+		public static int calculPrimeParalelUpdate(int limitaInf, int limitaSup) throws InterruptedException {
+			int nrFire = 4;
+			ArrayList<ThreadPrimSalt> fire = new ArrayList<>();
+			for(int i = 0 ;i < nrFire; i++) {
+				int limitaI = limitaInf + i;
+				ThreadPrimSalt tp = new ThreadPrimSalt(
+						limitaI, limitaSup,nrFire);
+				fire.add(tp);
+				tp.start();
+			}
+			
+			int rezultat = 0;
+			for(int i =0 ; i < nrFire; i++) {
+				fire.get(i).join();
+				rezultat += fire.get(i).getContor();
+			}
+			
+			return rezultat;
+		}
+	
 	
 	public static void main(String[] args) throws InterruptedException {
 
@@ -65,6 +87,16 @@ public class TestPrime {
 		System.out.println("Test solutie paralela");
 		tStart = System.currentTimeMillis();
 		rezultat = calculPrimeParalel(limitaInf, limitaSup);
+		tFinal = System.currentTimeMillis();
+		System.out.println(String.format(
+				"Rezultat = %d in %f secunde", 
+				rezultat, 
+				(tFinal-tStart)/1000));
+		
+		
+		System.out.println("Test solutie paralela 2");
+		tStart = System.currentTimeMillis();
+		rezultat = calculPrimeParalelUpdate(limitaInf, limitaSup);
 		tFinal = System.currentTimeMillis();
 		System.out.println(String.format(
 				"Rezultat = %d in %f secunde", 
