@@ -1,11 +1,20 @@
 package ro.ase.ie.paralel;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 public class JocBingo extends Thread{
 
-	volatile int numarExtras;
+	volatile int numarExtras; //volatile nu e garantat sa functioneze
 	int numarExtrageri;
+	
+	//solutie alternative
+	ArrayList<Integer> numereExtrase = new ArrayList<>();
+	
+	public List<Integer> getNumereExtrase(){
+		return (List<Integer>) this.numereExtrase.clone();
+	}
 	
 	public JocBingo(int numarExtrageri) {
 		super();
@@ -21,6 +30,7 @@ public class JocBingo extends Thread{
 			//this.numarExtras = numar;
 			this.numarExtras = i+1;
 			System.out.println("*** A fost extras " + numarExtras);
+			this.numereExtrase.add(this.numarExtras);
 		}
 		System.out.println("********** Joc terminat ***********");
 	}
